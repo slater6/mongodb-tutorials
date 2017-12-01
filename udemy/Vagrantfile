@@ -5,7 +5,7 @@
 github_username = "fideloper"
 github_repo     = "Vaprobash"
 github_branch   = "1.4.2"
-github_url      = "https://raw.githubusercontent.com/#{github_username}/#{github_repo}/#{github_branch}"
+github_url      = "."
 
 # Because this:https://developer.github.com/changes/2014-12-08-removing-authorizations-token/
 # https://github.com/settings/tokens
@@ -13,7 +13,7 @@ github_pat          = ""
 
 # Server Configuration
 
-hostname        = "vaprobash.dev"
+hostname        = "mongo.dev"
 
 # Set a local private network IP address.
 # See http://en.wikipedia.org/wiki/Private_network for explanation
@@ -39,7 +39,7 @@ mysql_version         = "5.5"    # Options: 5.5 | 5.6
 mysql_enable_remote   = "false"  # remote access enabled when true
 pgsql_root_password   = "root"   # We'll assume user "root"
 mongo_version         = "2.6"    # Options: 2.6 | 3.0
-mongo_enable_remote   = "false"  # remote access enabled when true
+mongo_enable_remote   = "true"  # remote access enabled when true
 
 # Languages and Packages
 php_timezone          = "UTC"    # http://php.net/manual/en/timezones.php
@@ -115,6 +115,7 @@ Vagrant.configure("2") do |config|
   else
     config.vm.network :private_network, ip: server_ip
     config.vm.network :forwarded_port, guest: 80, host: 8000
+    config.vm.network :forwarded_port, guest: 27017, host: 27017
   end
 
   # Enable agent forwarding over SSH connections
@@ -200,7 +201,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "#{github_url}/scripts/base_box_optimizations.sh", privileged: true
 
   # Provision PHP
-  config.vm.provision "shell", path: "#{github_url}/scripts/php.sh", args: [php_timezone, hhvm, php_version]
+  # config.vm.provision "shell", path: "#{github_url}/scripts/php.sh", args: [php_timezone, hhvm, php_version]
 
   # Enable MSSQL for PHP
   # config.vm.provision "shell", path: "#{github_url}/scripts/mssql.sh"
@@ -219,7 +220,7 @@ Vagrant.configure("2") do |config|
   # config.vm.provision "shell", path: "#{github_url}/scripts/apache.sh", args: [server_ip, public_folder, hostname, github_url]
 
   # Provision Nginx Base
-  # config.vm.provision "shell", path: "#{github_url}/scripts/nginx.sh", args: [server_ip, public_folder, hostname, github_url, php_version]
+  config.vm.provision "shell", path: "#{github_url}/scripts/nginx.sh", args: [server_ip, public_folder, hostname, github_url, php_version]
 
 
   ####
@@ -245,7 +246,7 @@ Vagrant.configure("2") do |config|
   # config.vm.provision "shell", path: "#{github_url}/scripts/couchdb.sh"
 
   # Provision MongoDB
-  # config.vm.provision "shell", path: "#{github_url}/scripts/mongodb.sh", args: [mongo_enable_remote, mongo_version]
+  config.vm.provision "shell", path: "#{github_url}/scripts/mongodb.sh", args: [mongo_enable_remote, mongo_version]
 
   # Provision MariaDB
   # config.vm.provision "shell", path: "#{github_url}/scripts/mariadb.sh", args: [mysql_root_password, mysql_enable_remote]
@@ -315,7 +316,7 @@ Vagrant.configure("2") do |config|
   ##########
 
   # Install Nodejs
-  # config.vm.provision "shell", path: "#{github_url}/scripts/nodejs.sh", privileged: false, args: nodejs_packages.unshift(nodejs_version, github_url)
+  config.vm.provision "shell", path: "#{github_url}/scripts/nodejs.sh", privileged: false, args: nodejs_packages.unshift(nodejs_version, github_url)
 
   # Install Ruby Version Manager (RVM)
   # config.vm.provision "shell", path: "#{github_url}/scripts/rvm.sh", privileged: false, args: ruby_gems.unshift(ruby_version)
