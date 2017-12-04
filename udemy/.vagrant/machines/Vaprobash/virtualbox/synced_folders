@@ -1,0 +1,1 @@
+{"virtualbox":{"core":{"id":"core","nfs":true,"mount_options":["dmode=777","fmode=666","uid=1000","gid=1000"],"guestpath":"/vagrant","hostpath":"D:/www/mongodb/udemy","disabled":false,"__vagrantfile":true}}}
