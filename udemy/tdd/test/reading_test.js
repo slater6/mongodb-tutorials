@@ -17,4 +17,13 @@ describe('Reading users from db', () => {
             done()
         })
     })
+
+    it('finds all users with by id', (done) => {
+        User.findOne({
+            _id : joe._id
+        }).then((user) => {
+            assert(user.name === joe.name)
+            done()
+        })
+    })
 })
