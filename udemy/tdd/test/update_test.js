@@ -5,7 +5,7 @@ describe("Updating records", () => {
   let joe;
 
   beforeEach(done => {
-    joe = new User({ name: "Joe", postCount: 0 });
+    joe = new User({ name: "Joe" });
     joe.save().then(() => done());
   });
 
@@ -20,12 +20,12 @@ describe("Updating records", () => {
     });
   }
 
-  function assertPostCount(operation, done) {
+  function assertLikeCount(operation, done) {
     operation.then(() => {
       User.findOne({
         _id: joe._id
       }).then(user => {
-        assert(user.postCount === 1);
+        assert(user.likes === 1);
         done();
       });
     });
@@ -52,9 +52,9 @@ describe("Updating records", () => {
     assertName(User.findByIdAndUpdate(joe._id, { name: "Alex" }), done);
   });
 
-  it("A user can have their postcount incremented by 1", done => {
-    assertPostCount(
-      User.findByIdAndUpdate(joe._id, { $inc: { postCount: 1 } }),
+  it("A user can have their likes incremented by 1", done => {
+    assertLikeCount(
+      User.findByIdAndUpdate(joe._id, { $inc: { likes: 1 } }),
       done
     );
   });
