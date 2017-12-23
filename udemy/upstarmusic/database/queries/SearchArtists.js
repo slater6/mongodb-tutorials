@@ -11,7 +11,7 @@ const Artist = require("../models/artist");
 module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
   const queryCriteria = {};
 
-  if (criteria.name !== "") {
+  if (criteria.name) {
     queryCriteria.$text = {
       $search: criteria.name
     };
@@ -35,12 +35,14 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
     .skip(offset)
     .limit(limit);
 
-  return Promise.all([query, Artist.count()]).then(results => {
-    return {
-      all: results[0],
-      count: results[1],
-      offset,
-      limit
-    };
-  });
+  return Promise.all([query, Artist.find(queryCriteria).count()]).then(
+    results => {
+      return {
+        all: results[0],
+        count: results[1],
+        offset,
+        limit
+      };
+    }
+  );
 };
