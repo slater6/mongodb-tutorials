@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon --exec mocha --recursive -R min"
+    "test": "SET NODE_ENV=test & nodemon --exec mocha --recursive -R min",
+    "start": "nodemon --exec node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "mocha": "^4.0.1",
     "mongoose": "^4.13.7",
